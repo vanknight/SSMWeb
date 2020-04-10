@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.dao.ProductReviewMapper">
+    <sql id="tableName">`commodity_review`</sql>
+
+
+    <resultMap id="reviewResultMap" type="com.web.bean.pojo.ProductReview">
+        <result property="id" column="review_id"/>
+        <result property="images" column="review_images"/>
+        <result property="content" column="review_content"/>
+        <result property="rating" column="review_rating"/>
+        <result property="time" column="review_date"/>
+        <result property="pid" column="commodity_id"/>
+        <result property="uid" column="uid"/>
+
+        <association property="user" column="uid"
+                     select="com.web.dao.UserMapper.findByUid"/>
+    </resultMap>
+
+
+    <select id="findAll" resultMap="reviewResultMap">
+        SELECT * FROM
+        <include refid="tableName"/>
+    </select>
+
+    <select id="findByPid" resultMap="reviewResultMap">
+        SELECT * FROM
+        <include refid="tableName"/>
+        WHERE `commodity_id`=#{pid}
+    </select>
+
+    <insert id="insertProductReview" parameterType="com.web.bean.pojo.ProductReview">
+        INSERT INTO
+        <include refid="tableName"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="images != null">
+                `review_images`,
+            </if>
+            <if test="content != null">
+                `review_content`,
+            </if>
+            <if test="pid != null">
+                `commodity_id`,
+            </if>
+            <if test="rating != null">
+                `review_rating`,
+            </if>
+            <if test="time != null">
+                `review_date`,
+            </if>
+            <if test="uid != null">
+                `uid`,
+            </if>
+        </trim>
+        <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+            <if test="images != null">
+                #{images},
+            </if>
+            <if test="content != null">
+                #{content},
+            </if>
+            <if test="pid != null">
+                #{pid},
+            </if>
+            <if test="rating != null">
+                #{rating},
+            </if>
+            <if test="time != null">
+                #{time},
+            </if>
+            <if test="uid != null">
+                #{uid},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPid" parameterType="com.web.bean.pojo.ProductReview">
+        update
+        <include refid="tableName"/>
+        <trim prefix="set " suffix="" suffixOverrides=",">
+            <if test="images != null">
+                `review_images`=#{images},
+            </if>
+            <if test="content != null">
+                `review_content`=#{content},
+            </if>
+            <if test="pid != null">
+                `commodity_id`=#{pid},
+            </if>
+            <if test="rating != null">
+                `review_rating`=#{rating},
+            </if>
+            <if test="uid != null">
+                `uid`=#{uid},
+            </if>
+        </trim>
+        <trim prefix=" where ">
+            `commodity_id`=#{pid}
+        </trim>
+    </update>
+
+    <delete id="deleteProductReview">
+        DELETE FROM
+        <include refid="tableName"/>
+        WHERE `review_id`=#{id}
+    </delete>
+
+</mapper>

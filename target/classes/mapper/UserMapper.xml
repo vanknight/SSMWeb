@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.dao.UserMapper">
+    <sql id="tableName">`user`</sql>
+
+    <!--<resultMap id="resultUser" type="com.web.bean.pojo.User">-->
+    <!--<id property="uid" column="uid"/>-->
+    <!--<result property="username" column="username"/>-->
+    <!--</resultMap>-->
+
+    <select id="findAll" resultType="com.web.bean.pojo.User">
+        SELECT * FROM
+        <include refid="tableName"/>
+    </select>
+
+    <select id="login" resultType="com.web.bean.pojo.User">
+        SELECT * FROM
+        <include refid="tableName"/>
+        WHERE `username` = #{username} and `password` = #{password}
+    </select>
+
+    <select id="findByUid" resultType="com.web.bean.pojo.User">
+        SELECT * FROM
+        <include refid="tableName"/>
+        WHERE `uid`=#{uid}
+    </select>
+
+    <select id="findByEmail" resultType="com.web.bean.pojo.User">
+        SELECT * FROM
+        <include refid="tableName"/>
+        WHERE `email`=#{email}
+    </select>
+
+    <select id="findByUsername" resultType="com.web.bean.pojo.User">
+        SELECT * FROM
+        <include refid="tableName"/>
+        WHERE `username`= #{username}
+    </select>
+
+    <select id="findByUsernameAndEmail" resultType="com.web.bean.pojo.User">
+        SELECT * FROM
+        <include refid="tableName"/>
+        WHERE `email`=#{email} and `username`=#{username}
+    </select>
+
+    <insert id="insertUser" parameterType="com.web.bean.pojo.User">
+        insert into
+        <include refid="tableName"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="uid != null">
+                `uid`,
+            </if>
+            <if test="username != null">
+                `username`,
+            </if>
+            <if test="password != null">
+                `password`,
+            </if>
+            <if test="name != null">
+                `name`,
+            </if>
+            <if test="email != null">
+                `email`,
+            </if>
+            <if test="telephone != null">
+                `telephone`,
+            </if>
+            <if test="birthday != null">
+                `birthday`,
+            </if>
+            <if test="sex != null">
+                `sex`,
+            </if>
+            <if test="state != null">
+                `state`,
+            </if>
+            <if test="code != null">
+                `code`,
+            </if>
+        </trim>
+        <trim prefix=" VALUES(" suffix=")" suffixOverrides=",">
+            <if test="uid != null">
+                #{uid},
+            </if>
+            <if test="username != null">
+                #{username},
+            </if>
+            <if test="password != null">
+                #{password},
+            </if>
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="email != null">
+                #{email},
+            </if>
+            <if test="telephone != null">
+                #{telephone},
+            </if>
+            <if test="birthday != null">
+                #{birthday},
+            </if>
+            <if test="sex != null">
+                #{sex},
+            </if>
+            <if test="state != null">
+                #{state},
+            </if>
+            <if test="code != null">
+                #{code},
+            </if>
+        </trim>
+    </insert>
+
+
+    <update id="updateByUid" parameterType="com.web.bean.pojo.User">
+        update
+        <include refid="tableName"/>
+        <if test="uid != null">
+            <trim prefix="set " suffixOverrides=",">
+                <if test="username != null">
+                    `username`=#{username},
+                </if>
+                <if test="password != null">
+                    `password`=#{password},
+                </if>
+                <if test="name != null">
+                    `name`=#{name},
+                </if>
+                <if test="email != null">
+                    `email`=#{email},
+                </if>
+                <if test="telephone != null">
+                    `telephone`=#{telephone},
+                </if>
+                <if test="birthday != null">
+                    `birthday`=#{birthday},
+                </if>
+                <if test="sex != null">
+                    `sex`=#{sex},
+                </if>
+                <if test="state != null">
+                    `state`=#{state},
+                </if>
+                <if test="code != null">
+                    `code`=#{code},
+                </if>
+            </trim>
+            <trim prefix=" where ">
+                `uid`=#{uid}
+            </trim>
+        </if>
+    </update>
+
+    <delete id="deleteUser">
+        DELETE FROM
+        <include refid="tableName"/>
+        WHERE `uid`=#{uid}
+    </delete>
+
+</mapper>

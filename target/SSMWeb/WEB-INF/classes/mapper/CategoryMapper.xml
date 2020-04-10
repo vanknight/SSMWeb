@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.dao.CategoryMapper">
+    <sql id="tableName">`commodity_type`</sql>
+
+
+    <resultMap id="categoryResultMap" type="com.web.bean.pojo.Category">
+        <result property="cid" column="type_id"/>
+        <result property="cname" column="type_name"/>
+    </resultMap>
+
+
+    <select id="findAll" resultMap="categoryResultMap">
+        SELECT * FROM
+        <include refid="tableName"/>
+    </select>
+
+    <select id="findByCid" resultMap="categoryResultMap">
+        SELECT * FROM
+        <include refid="tableName"/>
+        WHERE `type_id`=#{cid}
+    </select>
+
+    <insert id="insertCategory" parameterType="com.web.bean.pojo.Category">
+        INSERT INTO
+        <include refid="tableName"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cid != null">
+                `type_id`,
+            </if>
+            <if test="cname != null">
+                `type_name`,
+            </if>
+        </trim>
+        <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+            <if test="cid != null">
+                #{cid},
+            </if>
+            <if test="cname != null">
+                #{cname},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByCid" parameterType="com.web.bean.pojo.Category">
+        update
+        <include refid="tableName"/>
+        <trim prefix="set " suffixOverrides=",">
+            <if test="cname != null">
+                `type_name`=#{cname},
+            </if>
+        </trim>
+        <trim prefix=" where ">
+            `type_id`=#{cid}
+        </trim>
+    </update>
+
+    <delete id="deleteCategory">
+        DELETE FROM
+        <include refid="tableName"/>
+        WHERE `type_id`=#{cid}
+    </delete>
+
+</mapper>

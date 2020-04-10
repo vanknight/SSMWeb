@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.dao.ExpressMapper">
+    <sql id="tableName">`logistics`</sql>
+
+    <resultMap id="expressResultMap" type="com.web.bean.pojo.Express">
+        <id property="eid" column="logistics_id"/>
+        <result property="oid" column="order_id"/>
+        <result property="logisticCode" column="logistic_code"/>
+        <result property="shipperCode" column="shipper_code"/>
+        <result property="remarks" column="remarks"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="expressResultMap">
+        SELECT * FROM
+        <include refid="tableName"/>
+    </select>
+
+    <select id="findByEid" resultMap="expressResultMap" >
+        SELECT * FROM
+        <include refid="tableName"/>
+        WHERE `logistics_id`=#{eid}
+    </select>
+
+    <select id="findByOid" resultMap="expressResultMap">
+        SELECT * FROM
+        <include refid="tableName"/>
+        WHERE `order_id`=#{oid}
+    </select>
+
+    <insert id="insertExpress" parameterType="com.web.bean.pojo.Express">
+        INSERT INTO
+        <include refid="tableName"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="eid != null">
+                `logistics_id`,
+            </if>
+            <if test="oid != null">
+                `order_id`,
+            </if>
+            <if test="logisticCode != null">
+                `logistic_code`,
+            </if>
+            <if test="shipperCode != null">
+                `shipper_code`,
+            </if>
+            <if test="remarks != null">
+                `remarks`,
+            </if>
+        </trim>
+        <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+            <if test="eid != null">
+                #{eid},
+            </if>
+            <if test="oid != null">
+                #{oid},
+            </if>
+            <if test="logisticCode != null">
+                #{logisticCode},
+            </if>
+            <if test="shipperCode != null">
+                #{shipperCode},
+            </if>
+            <if test="remarks != null">
+                #{remarks},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByEid" parameterType="com.web.bean.pojo.Express">
+        update
+        <include refid="tableName"/>
+        <trim prefix="set " suffixOverrides=",">
+            <if test="oid != null">
+                `order_id`=#{oid},
+            </if>
+            <if test="logisticCode != null">
+                `logistic_code`=#{logisticCode},
+            </if>
+            <if test="shipperCode != null">
+                `shipper_code`=#{shipperCode},
+            </if>
+            <if test="remarks != null">
+                `remarks`=#{remarks},
+            </if>
+        </trim>
+        <trim prefix=" where ">
+            `logistics_id`=#{eid}
+        </trim>
+    </update>
+
+    <delete id="deleteByOid">
+        DELETE FROM
+        <include refid="tableName"/>
+        WHERE `order_id`=#{oid}
+    </delete>
+
+</mapper>

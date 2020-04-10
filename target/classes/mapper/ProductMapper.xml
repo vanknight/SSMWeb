@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.dao.ProductMapper">
+    <sql id="tableName">`commodity`</sql>
+    <sql id="pro_down">1</sql>
+    <sql id="pro_up">0</sql>
+
+    <resultMap id="productResultMap" type="com.web.bean.pojo.Product">
+        <id property="pid" column="commodity_id"/>
+        <result property="name" column="commodity_name"/>
+        <result property="marketPrice" column="market_price"/>
+        <result property="shopPrice" column="shop_price"/>
+        <result property="image" column="commodity_image"/>
+        <result property="date" column="commodity_date"/>
+        <result property="isHot" column="commodity_hot"/>
+        <result property="rating" column="commodity_rating"/>
+        <result property="desc" column="commodity_desc"/>
+        <result property="stock" column="commodity_stock"/>
+        <result property="cid" column="type_id"/>
+        <result property="state" column="state"/>
+        <association property="details" column="commodity_id"
+                     select="com.web.dao.ProductDetailsMapper.findByPid"/>
+        <collection property="listReview" ofType="com.web.bean.pojo.ProductReview" column="commodity_id"
+                    select="com.web.dao.ProductReviewMapper.findByPid"/>
+    </resultMap>
+
+    <resultMap id="productResultMap2" type="com.web.bean.pojo.Product">
+        <id property="pid" column="commodity_id"/>
+        <result property="name" column="commodity_name"/>
+        <result property="marketPrice" column="market_price"/>
+        <result property="shopPrice" column="shop_price"/>
+        <result property="image" column="commodity_image"/>
+        <result property="date" column="commodity_date"/>
+        <result property="isHot" column="commodity_hot"/>
+        <result property="rating" column="commodity_rating"/>
+        <result property="desc" column="commodity_desc"/>
+        <result property="stock" column="commodity_stock"/>
+        <result property="cid" column="type_id"/>
+        <result property="state" column="state"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="productResultMap">
+        SELECT * FROM
+        <include refid="tableName"/>
+        WHERE `state` != <include refid="pro_down"/>
+    </select>
+
+    <select id="findByPid" resultMap="productResultMap">
+        SELECT * FROM
+        <include refid="tableName"/>
+        WHERE `commodity_id` = #{pid}
+        AND `state` != <include refid="pro_down"/>
+    </select>
+
+    <select id="findByPidAdmin" resultMap="productResultMap">
+        SELECT * FROM
+        <include refid="tableName"/>
+        WHERE `commodity_id` = #{pid}
+    </select>
+
+    <select id="findByPidAdminNoObj" resultMap="productResultMap2">
+        SELECT * FROM
+        <include refid="tableName"/>
+        WHERE `commodity_id` = #{pid}
+    </select>
+
+    <select id="findNew" resultMap="productResultMap">
+        SELECT * FROM
+        <include refid="tableName"/>
+        WHERE `state` !=
+        <include refid="pro_down"/>
+        ORDER BY `commodity_date` DESC LIMIT #{start},#{size}
+    </select>
+
+    <select id="findHot" resultMap="productResultMap">
+        SELECT * FROM
+        <include refid="tableName"/>
+        WHERE `commodity_hot` = 1
+        AND `state` != <include refid="pro_down"/>
+        ORDER BY `commodity_date` DESC LIMIT #{start},#{size}
+    </select>
+
+    <select id="findByCid" resultMap="productResultMap">
+        SELECT * FROM
+        <include refid="tableName"/>
+        WHERE `type_id` = #{cid}
+        AND `state` !=
+        <include refid="pro_down"/>
+        ORDER BY `commodity_date` DESC
+    </select>
+
+    <select id="findByCidAdmin" resultMap="productResultMap">
+        SELECT * FROM
+        <include refid="tableName"/>
+        WHERE `type_id` = #{cid}
+        ORDER BY `commodity_date` DESC
+    </select>
+
+    <select id="findByCidLimit" resultMap="productResultMap">
+        SELECT * FROM
+        <include refid="tableName"/>
+        WHERE `type_id` = #{cid}
+        AND `state` !=
+        <include refid="pro_down"/>
+        ORDER BY `commodity_date` DESC
+        LIMIT 0,#{size}
+    </select>
+
+    <select id="findAllByAdmin" resultMap="productResultMap">
+        SELECT * FROM
+        <include refid="tableName"/>
+    </select>
+
+    <select id="findSearch" resultMap="productResultMap">
+        SELECT * FROM <include refid="tableName"/>
+        WHERE `commodity_name` LIKE #{search}
+    </select>
+
+
+    <insert id="insertProduct" parameterType="com.web.bean.pojo.Product">
+        insert into
+        <include refid="tableName"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pid != null">
+                `commodity_id`,
+            </if>
+            <if test="name != null">
+                `commodity_name`,
+            </if>
+            <if test="marketPrice != null">
+                `market_price`,
+            </if>
+            <if test="shopPrice != null">
+                `shop_price`,
+            </if>
+            <if test="image != null">
+                `commodity_image`,
+            </if>
+            <if test="date != null">
+                `commodity_date`,
+            </if>
+            <if test="isHot != null">
+                `commodity_hot`,
+            </if>
+            <if test="desc != null">
+                `commodity_desc`,
+            </if>
+            <if test="stock != null">
+                `commodity_stock`,
+            </if>
+            <if test="cid != null">
+                `type_id`,
+            </if>
+            <if test="state != null">
+                `state`,
+            </if>
+        </trim>
+
+
+        <trim prefix=" VALUES(" suffix=")" suffixOverrides=",">
+            <if test="pid != null">
+                #{pid},
+            </if>
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="marketPrice != null">
+                #{marketPrice},
+            </if>
+            <if test="shopPrice != null">
+                #{shopPrice},
+            </if>
+            <if test="image != null">
+                #{image},
+            </if>
+            <if test="date != null">
+                #{date},
+            </if>
+            <if test="isHot != null">
+                #{isHot},
+            </if>
+            <if test="desc != null">
+                #{desc},
+            </if>
+            <if test="stock != null">
+                #{stock},
+            </if>
+            <if test="cid != null">
+                #{cid},
+            </if>
+            <if test="state != null">
+                #{state},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPid" parameterType="com.web.bean.pojo.Product">
+        update
+        <include refid="tableName"/>
+        <trim prefix="set " suffixOverrides=",">
+            <if test="name != null">
+                `commodity_name`=#{name},
+            </if>
+            <if test="marketPrice != null">
+                `market_price`=#{marketPrice},
+            </if>
+            <if test="shopPrice != null">
+                `shop_price`=#{shopPrice},
+            </if>
+            <if test="image != null">
+                `commodity_image`=#{image},
+            </if>
+            <if test="date != null">
+                `commodity_date`=#{date},
+            </if>
+            <if test="isHot != null">
+                `commodity_hot`=#{isHot},
+            </if>
+            <if test="desc != null">
+                `commodity_desc`=#{desc},
+            </if>
+            <if test="stock != null">
+                `commodity_stock`=#{stock},
+            </if>
+            <if test="cid != null">
+                `type_id`=#{cid},
+            </if>
+            <if test="state != null">
+                `state`=#{state},
+            </if>
+        </trim>
+        <trim prefix=" where ">
+            `commodity_id`=#{pid}
+        </trim>
+    </update>
+
+    <update id="updateByPidToState">
+        update
+        <include refid="tableName"/>
+        <trim prefix="set " suffixOverrides=",">
+            <if test="state != null">
+                `state`=#{state},
+            </if>
+        </trim>
+        <trim prefix=" where ">
+            `commodity_id`=#{pid}
+        </trim>
+    </update>
+    <update id="updateByPidToRating">
+        update
+        <include refid="tableName"/>
+        <trim prefix="set " suffixOverrides=",">
+            <if test="rating != null">
+                `commodity_rating`=#{rating},
+            </if>
+        </trim>
+        <trim prefix=" where ">
+            `commodity_id`=#{pid}
+        </trim>
+    </update>
+
+    <delete id="deleteProduct">
+        DELETE * FROM
+        <include refid="tableName"/>
+        WHERE `commodity_id`=#{pid}
+    </delete>
+
+</mapper>

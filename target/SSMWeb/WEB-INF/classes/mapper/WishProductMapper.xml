@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.dao.WishProductMapper">
+    <sql id="tableName">`commodity_collections`</sql>
+
+    <resultMap id="wishProductResultMap" type="com.web.bean.pojo.WishProduct">
+        <id property="wid" column="collections_id"/>
+        <result property="uid" column="uid"/>
+        <result property="pid" column="commodity_id"/>
+        <association property="product" column="commodity_id"
+                     select="com.web.dao.ProductMapper.findByPid"/>
+    </resultMap>
+
+
+    <select id="findAll" resultMap="wishProductResultMap">
+        SELECT * FROM
+        <include refid="tableName"/>
+    </select>
+
+    <select id="findByUid" resultMap="wishProductResultMap">
+        SELECT * FROM
+        <include refid="tableName"/>
+        WHERE `uid`=#{uid}
+    </select>
+
+    <select id="findByUidAndPid" resultType="com.web.bean.pojo.WishProduct">
+        SELECT * FROM
+        <include refid="tableName"/>
+        WHERE `uid`=#{uid} and `commodity_id`=#{pid}
+    </select>
+
+    <insert id="insertWishProduct" parameterType="com.web.bean.pojo.WishProduct">
+        INSERT INTO
+        <include refid="tableName"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="wid != null">
+                `collections_id`,
+            </if>
+            <if test="uid != null">
+                uid,
+            </if>
+            <if test="pid != null">
+                `commodity_id`,
+            </if>
+        </trim>
+        <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+            <if test="wid != null">
+                #{wid},
+            </if>
+            <if test="uid != null">
+                #{uid},
+            </if>
+            <if test="pid != null">
+                #{pid},
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="deleteWishProduct">
+        DELETE FROM
+        <include refid="tableName"/>
+        WHERE `uid`=#{uid} and `commodity_id`=#{pid}
+    </delete>
+
+    <delete id="deleteWishProductByWid">
+        DELETE FROM
+        <include refid="tableName"/>
+        WHERE `collections_id`=#{wid}
+    </delete>
+
+    <delete id="deleteWishProductByUid">
+        DELETE FROM
+        <include refid="tableName"/>
+        WHERE `uid`=#{uid}
+    </delete>
+
+
+</mapper>

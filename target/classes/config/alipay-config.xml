@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.2.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
+       default-autowire="byName" default-lazy-init="true">
+
+    <!--DefaultAlipayClient(String serverUrl, String appId, String privateKey, String format, String charset, String alipayPulicKey, String signType)-->
+
+    <bean id="alipayClient" class="com.alipay.api.DefaultAlipayClient">
+        <constructor-arg name="appId" value="${alipay.appid}"/>
+        <constructor-arg name="serverUrl" value="${alipay.open_api_domain}"/>
+        <constructor-arg name="privateKey" value="${alipay.private_key}"/>
+        <constructor-arg name="format" value="json"/>
+        <constructor-arg name="charset" value="${alipay.charset}"/>
+        <constructor-arg name="alipayPulicKey" value="${alipay.alipay_public_key}"/>
+        <constructor-arg name="signType" value="${alipay.sign_type}"/>
+        <!--<constructor-arg name="appId">-->
+        <!--<util:constant static-field="com.web.config.AlipayConfiguration.appId"/>-->
+        <!--</constructor-arg>-->
+        <!--<constructor-arg name="serverUrl">-->
+        <!--<util:constant static-field="com.web.config.AlipayConfiguration.serverUrl"/>-->
+        <!--</constructor-arg>-->
+        <!--<constructor-arg name="privateKey">-->
+        <!--<util:constant static-field="com.web.config.AlipayConfiguration.privateKey"/>-->
+        <!--</constructor-arg>-->
+        <!--<constructor-arg name="format">-->
+        <!--<util:constant static-field="com.web.config.AlipayConfiguration.format"/>-->
+        <!--</constructor-arg>-->
+        <!--<constructor-arg name="charset">-->
+        <!--<util:constant static-field="com.web.config.AlipayConfiguration.charset"/>-->
+        <!--</constructor-arg>-->
+        <!--<constructor-arg name="alipayPulicKey">-->
+        <!--<util:constant static-field="com.web.config.AlipayConfiguration.alipayPublicKey"/>-->
+        <!--</constructor-arg>-->
+        <!--<constructor-arg name="signType">-->
+        <!--<util:constant static-field="com.web.config.AlipayConfiguration.signType"/>-->
+        <!--</constructor-arg>-->
+    </bean>
+
+
+</beans>
