@@ -16,7 +16,7 @@
     <properties>
         <spring-version class="version">5.0.2.RELEASE</spring-version>
         <aspectJ-version class="version">1.8.10</aspectJ-version>
-        <jackson-version class="version">2.9.8</jackson-version>
+        <jackson-version class="version">2.11.0</jackson-version>
     </properties>
 
     <dependencies>
